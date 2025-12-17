@@ -27,7 +27,7 @@ export const useSocket = (): SocketContextType => {
     return context
 }
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
+const BACKEND_URL =  import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
 const SocketProvider = ({ children }: { children: ReactNode }) => {
     const {
@@ -40,9 +40,11 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
     } = useAppContext()
     const socket: Socket = useMemo(
         () =>
-            io(BACKEND_URL, {
-                reconnectionAttempts: 2,
-            }),
+           io(BACKEND_URL, {
+        transports: ["websocket"],
+        reconnectionAttempts: 3,
+        withCredentials: true,
+      }),
         [],
     )
 
